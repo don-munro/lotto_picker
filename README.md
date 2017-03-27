@@ -22,8 +22,9 @@ python setup.py test
 
 ## Notes
 
-With restriction that numbers be in range of 1..59,  we know that each number is made up of either one or two digits.
-With this we can see that the following combinations of 1 and 2 digit numbers are possible for a string of len(n):
+With the defined ticket restrictions we know that each ticket is made up of a 7, one or two digit numbers, that range
+from 1..59.  With this we can see that the following combinations of 1 and 2 digit numbers are possible for a string
+of len(n):
 
 ```
      len(n) |  1 dig. |  2 dig. | # combos
