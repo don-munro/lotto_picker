@@ -47,11 +47,20 @@ When executed directly lotto_picker will also print the results.
 The easiest way to run lotto picker is with the following steps:
 
 ```
+cd $YOUR_WORK_DIR
 git clone https://github.com/don-munro/lotto_picker.git
 cd lotto_picker/lotto_picker
 python lotto_picker <list of numeric strings>
 ```
 
+## Running Test Cases
+A small number of unit tests have been included in recognition that good test habits lead to good code.
+To run the test cases:
+
+```
+cd $YOUR_WORK_DIR\lotto_picker
+python setup.py test
+```
 
 NB:  This is a streamlined project, void of files that are not required to directly solve
      Uncle Morty's Programming Problem.
