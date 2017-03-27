@@ -1,7 +1,12 @@
 import itertools
 import sys
 
-import popcount
+
+MIN_NUM = 1
+MAX_NUM = 59
+NUMS_PER_TICKET = 7
+MIN_STR_LEN = NUMS_PER_TICKET
+MAX_STR_LEN = NUMS_PER_TICKET*2
 
 
 def is_numeric(num_str):
@@ -28,7 +33,7 @@ def is_candidate(num):
     :return: True if the string meets the format requirements.
              False otherwise.
     """
-    return is_numeric(num) and (7 <= len(num) <= 14)
+    return is_numeric(num) and (MIN_STR_LEN <= len(num) <= MAX_STR_LEN*2)
 
 
 class Lotto(object):
@@ -36,33 +41,34 @@ class Lotto(object):
         self.numbers_map = {}
 
     def _get_slice_counts(self, numeric):
-        num_dbl_digits = len(numeric) - 7
-        combos = itertools.combinations(range(7), num_dbl_digits)
-        # convert each 'combo' into a list of 7 values that can be used
-        # directly to split the provided string.
-        slices = [[2 if i in combo else 1 for i in range(0, 7)]
+        num_dbl_digits = len(numeric) - NUMS_PER_TICKET
+        combos = itertools.combinations(range(NUMS_PER_TICKET), num_dbl_digits)
+        # convert each 'combo' into a list of NUM_NUMBERS values that can be
+        # used directly to slice the provided string.
+        slices = [[2 if i in combo else 1 for i in range(0, NUMS_PER_TICKET)]
                   for combo in combos]
 
         return slices
 
-    def _slice_numeric_string(self, numeric, slice_counts):
-        """ Slice the provided numeric string into 7 lotto numbers
+    def _slice_numeric(self, numeric, slice_counts):
+        """Slice the provided numeric string into 7 lotto numbers.
 
-        :param numeric: A numeric string that is to be slice into 7 lottery
-                        numbers [1..59] as dictated by the provided mask.
-        :param digit_counts: A list of 7 integer values [1..2] that identify
-                             number of digits each lotto number is to be.
+        :param numeric: A numeric string that is to be sliced into 7 lottery
+                        numbers [1..59] as dictated by the slice_counts list.
+        :param slice_counts: A list of 7 integer values [1..2] that provides
+                             an order list of how numeric should be sliced.
 
-        :return: A list of 7 lotto numbers
+        :return: A list of 7 lotto numbers if the slice produced a valid set
+                 of numbers otherwise returns None.
 
         """
         def is_valid():
             return (as_int not in lotto_numbers and
-                    (1 <= as_int <= 59))
+                    (MIN_NUM <= as_int <= MAX_NUM))
 
         lotto_numbers = []
         slice_start = 0
-        for i in range(0, 7):
+        for i in range(0, NUMS_PER_TICKET):
             slice_end = slice_start + slice_counts[i]
             as_int = int(numeric[slice_start: slice_end])
             if is_valid():
@@ -74,8 +80,27 @@ class Lotto(object):
 
         return lotto_numbers
 
+    def check_numeric_strings(self, numbers):
+        """Check the given numeric strings for possible lotto numbers.
+
+        :param numbers: A list of numeric strings
+
+        :return: The updated map that identifies a list of lotto numbers for
+                 successful strings.
+        """
+        filter_gen = (num for num in numbers
+                      if is_candidate(num) and not self.numbers_map.get(num))
+        for num in filter_gen:
+            slices = self._get_slice_counts(num)
+            slice_gen = (self._slice_numeric(num, mask) for mask in slices)
+            lotto_numbers = [nums for nums in slice_gen if nums]
+            if lotto_numbers:
+                self.numbers_map[num] = lotto_numbers
+
+        return self.numbers_map
+
     def print_numbers(self):
-        """ Prints the set of lotto numbers that have been identified.
+        """Prints the set of lotto numbers that have been identified.
 
         All sets of lotto numbers for successful strings will be printed with
         the following  example format:
@@ -92,19 +117,6 @@ class Lotto(object):
                                 for x in lottos)
             print ("%s -> %s" % (key, numbers))
 
-    def check_number_strings(self, numbers):
-
-        gen = (num for num in numbers if is_candidate(num))
-        for num in gen:
-            slices = self._get_slice_counts(num)
-            lotto_numbers = [self._slice_numeric_string(num, mask)
-                             for mask in slices]
-            lotto_numbers = filter(lambda v: v is not None, lotto_numbers)
-            if lotto_numbers:
-                self.numbers_map[num] = lotto_numbers
-
-        return self.numbers_map
-
 
 def main(argv):
     if not argv:
@@ -112,7 +124,7 @@ def main(argv):
         sys.exit(2)
 
     lotto = Lotto()
-    lotto.check_number_strings(argv)
+    lotto.check_numeric_strings(argv)
     lotto.print_numbers()
 
 
