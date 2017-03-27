@@ -1,5 +1,26 @@
 ## Uncle Morty's Lotto Picker
 
+## Running Lotto Picker
+
+The easiest way to run lotto picker is with the following steps:
+
+```
+cd $YOUR_WORK_DIR
+git clone https://github.com/don-munro/lotto_picker.git
+cd lotto_picker/lotto_picker
+python lotto <list of numeric strings>
+```
+
+## Running Test Cases
+A small number of unit tests have been included in recognition that good test habits lead to good code.
+To run the test cases:
+
+```
+cd $YOUR_WORK_DIR\lotto_picker
+python setup.py test
+```
+
+## Notes
 
 With restriction that numbers be in range of 1..59,  we know that each number is made up of either one or two digits.
 With this we can see that the following combinations of 1 and 2 digit numbers are possible for a string of len(n):
@@ -28,7 +49,7 @@ To identify all possible lotto numbers for a given string we note that:
 * There may be many ways (combinations) that the string can be sliced.
 * More than one 'slicing' may result in a valid set of lotto numbers.
 
-# The solution
+## The solution
 
 The solution at hand here :
 * Maintains a string-to-numbers map that identifies a set of valid lotto numbers that can be gleaned from a
@@ -41,26 +62,6 @@ The solution at hand here :
 * Cycle though all provided strings
 
 When executed directly lotto_picker will also print the results.
-
-## Running Lotto Picker
-
-The easiest way to run lotto picker is with the following steps:
-
-```
-cd $YOUR_WORK_DIR
-git clone https://github.com/don-munro/lotto_picker.git
-cd lotto_picker/lotto_picker
-python lotto <list of numeric strings>
-```
-
-## Running Test Cases
-A small number of unit tests have been included in recognition that good test habits lead to good code.
-To run the test cases:
-
-```
-cd $YOUR_WORK_DIR\lotto_picker
-python setup.py test
-```
 
 ## Algorithm Analysis
 
