@@ -50,7 +50,7 @@ The easiest way to run lotto picker is with the following steps:
 cd $YOUR_WORK_DIR
 git clone https://github.com/don-munro/lotto_picker.git
 cd lotto_picker/lotto_picker
-python lotto_picker <list of numeric strings>
+python lotto <list of numeric strings>
 ```
 
 ## Running Test Cases
@@ -90,8 +90,8 @@ This does come with some overhead in order to format the output as required.
 ### Efficiency changes and notes:
 * As an improvement, I actually started off using an approach for 'Generating Binary Permutations in Popcount order'
   which was something I stumbled across recently. It seemed like a good approach and worked as expected but I clued
-  in a bit that Python's itertools might just provide a better option with combinations.  A quick test showed it was
-  > 5x more efficient so I bailed on the use of Popcounts. I'll admit that cute idea was not so cute after all.
+  in a bit that Python's itertools might just provide a better option with combinations. A quick test showed it was
+  more than 5x more efficient so I bailed on the use of Popcounts. I'll admit that cute idea was not so cute after all.
   (reference: http://alexbowe.com/popcount-permutations/)
 * A change I considered to improve the efficiency with which lotto numbers can be printed was to build up the map of
   successful numbers using strings as the values instead of the list of integers I currently use.  In the end I'll note
