@@ -47,12 +47,15 @@ class Lotto(object):
             self.numbers_map[numeric] = lotto_numbers
 
     def _get_slice_counts(self, numeric):
-
         num_dbl_digits = len(numeric) - 7
-        masks = popcount.get_pop_counts(num_dbl_digits, 7)
-        digit_masks = [[(pop >> i & 1) + 1 for i in range(6, -1, -1)]
-                       for pop in masks]
-        return digit_masks
+        combos = itertools.combinations(range(7), num_dbl_digits)
+        # convert each 'combo' into a list of 7 values that can be used
+        # directly to split the provided string.
+        slices = [[2 if i in combo else 1 for i in range(0, 7)]
+                 for combo in combos]
+
+        return slices
+
 
     def _slice_numeric_string(self, numeric, digit_counts):
         """ slice the provided numeric string into 7 lotto numbers
@@ -111,7 +114,6 @@ class Lotto(object):
             lotto_numbers = filter(lambda v: v is not None, lotto_numbers)
             if lotto_numbers:
                 self.numbers_map[num] = lotto_numbers
-
 
 
 def main(argv):
